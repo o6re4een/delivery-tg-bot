@@ -4,9 +4,9 @@ from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
 from bot.states.states import User_Data
 from bot.keyboards.keyboards import main, menu
-from bot.api.basket_api import add_to_cart
+from bot.api.basket_api import add_to_cart, format_basket, get_user_cart_formated
 
-
+sep = "----------------------------------"
 menu_router = Router()
 
 @menu_router.message(F.text=="Блюда")
@@ -26,8 +26,13 @@ async def product_selected(callback: CallbackQuery, state: FSMContext):
     user_data = await state.get_data()
     await state.update_data(chosen_food=product_name)
     try:
-        await add_to_cart(user_data["user_id"], product_name)
-        await callback.message.answer("Пицца добавленна в корзину", reply_markup=await menu())
+        formated_basket = await add_to_cart(user_data["user_id"], product_name)
+        
+
+        await callback.message.answer(f"{product_name} добавленна в корзину \n {sep} \n {formated_basket} \n {sep}", reply_markup=await menu(), parse_mode="html")
+        # await callback.message.answer(formated_basket, parse_mode="html")
+       
+
     except Exception as e:
         print(e)
     # await state.set_state(User_Data.choosing_count)

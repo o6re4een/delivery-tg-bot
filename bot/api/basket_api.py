@@ -9,9 +9,11 @@ async def add_to_cart(user_id: str, food_name: str):
         "user_ID": user_id,
         "foodName": food_name
     })
+    
     basket =  r.json()
+    formated_basket = format_basket(basket)
     # print(basket)
-    return basket
+    return formated_basket
 
 async def get_user_cart_formated(user_id: str):
     r = requests.get(f"{server_url}/basket/{user_id}")
@@ -30,3 +32,4 @@ def format_basket(cart_data):
 
     formatted_text += f"------------------- \n <b>Итого: {cart_data['price']} RUB </b> \n"
     return formatted_text
+

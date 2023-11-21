@@ -9,6 +9,7 @@ import sys
 from bot.handlers.handlers import router
 from bot.handlers.menu_handler import menu_router
 from bot.handlers.basket_handler import basket_router
+from bot.handlers.order_handler import order_router
 from aiogram.utils.chat_action import ChatActionMiddleware
 from config import config
 from aiogram.fsm.strategy import FSMStrategy
@@ -17,7 +18,7 @@ async def main() ->None:
     bot = Bot(token=config.bot_token.get_secret_value())
 
     dp = Dispatcher(bot=bot, storage=MemoryStorage(), fsm_strategy=FSMStrategy.USER_IN_CHAT)
-    dp.include_routers(router, menu_router, basket_router)
+    dp.include_routers(router, menu_router, basket_router, order_router)
     dp.message.middleware(ChatActionMiddleware())
 
     try:
